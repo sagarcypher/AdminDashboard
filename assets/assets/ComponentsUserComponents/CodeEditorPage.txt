@@ -1,0 +1,57 @@
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import './NewQuestion.css';
+
+const CodeEditorPage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [code, setCode] = useState('');
+  const { topic, difficulty, language } = location.state || {};
+
+  useEffect(() => {
+    if (!topic || !difficulty || !language) {
+      navigate('/create-question');
+    }
+  }, [topic, difficulty, language, navigate]);
+
+  return (
+    <div className="page-container">
+      <div className="card">
+        <div className="card-header">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h2 className="card-title">
+              Write Code - {topic} ({difficulty})
+            </h2>
+            <span style={{ color: '#666', fontSize: '14px' }}>
+              Language: {language}
+            </span>
+          </div>
+        </div>
+
+        <textarea
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          className="code-editor"
+          placeholder={`Write your ${language} code here...`}
+        />
+
+        <div className="button-container">
+          <button 
+            className="button button-outline"
+            onClick={() => navigate(-1)}
+          >
+            Back
+          </button>
+          <button 
+            className="button button-primary"
+            onClick={() => console.log('Save code:', code)}
+          >
+            Save Question
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CodeEditorPage;
